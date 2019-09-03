@@ -42,21 +42,31 @@ public class IOSort {
 	 * @param directoryPath
 	 */
 	public static void sortDirectory(String directoryPath) {
+		System.out.println("Get the directory to sort...");
 		// set the directory to sort File
 		directoryToSort = new File(directoryPath);
 		setLongestFileName(directoryToSort);
+		System.out.println("Create the sorted directory...");
 		setSortedDirectory();
 		// Create the directories
 		try {
+			System.out.println("Creating the directories by extension name, and move the files...");
 			createDirectoriesByFileExtensions(directoryToSort);
+			System.out.println("Finished creating directories and moving files...");
+			// Create the summary directory and file
+			System.out.println("Creating the summary...");
+			createSummary();
+			System.out.println("Finished the summary...");
 		} catch (IOException e) {
-			e.printStackTrace();
 			System.out.println(e.getMessage());
+		} finally {
+			System.out.println("Finished");
 		}
-		// Create the summary directory and file
-		createSummary();
 	}
 
+	/**
+	 * Set the sorted directory in the same directory as the unsorted directory
+	 */
 	private static void setSortedDirectory() {
 		sortedDirectory = new File(
 				directoryToSort.getParentFile().getPath().concat("(" + directoryToSort.getName() + ") sorted_folder"));
