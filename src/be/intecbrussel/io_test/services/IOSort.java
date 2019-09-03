@@ -45,7 +45,6 @@ public class IOSort {
 		System.out.println("Get the directory to sort...");
 		// set the directory to sort File
 		directoryToSort = new File(directoryPath);
-		setLongestFileName(directoryToSort);
 		System.out.println("Create the sorted directory...");
 		setSortedDirectory();
 		// Create the directories
@@ -69,37 +68,9 @@ public class IOSort {
 	 */
 	private static void setSortedDirectory() {
 		sortedDirectory = new File(
-				directoryToSort.getParentFile().getPath().concat("(" + directoryToSort.getName() + ") sorted_folder"));
+				directoryToSort.getParentFile().getPath().concat(PATH_SEPARATOR + "(" + directoryToSort.getName() + ") sorted_folder"));
 		if (!sortedDirectory.exists()) {
 			sortedDirectory.mkdir();
-		}
-	}
-
-	/**
-	 * Get the length of the longest filename from inside the given directory
-	 * 
-	 * @param directory - The directory that need to be searched for the longest
-	 *                  filename
-	 */
-	private static void setLongestFileName(File directory) {
-		if (directory.listFiles() != null) {
-			// If the given directory has sub folders and/or files, loop through them
-			for (File file : directory.listFiles()) {
-				if (file.isDirectory()) {
-					// If the current file is a directory, call this method again
-					setLongestFileName(file);
-				} else {
-					// If the current file is not a directory, check the length of the filename
-					int length;
-					if ((length = file.getName().length()) > longestFileNameLength) {
-						/*
-						 * If the length of the current filename is longer than the current longest
-						 * filename length set it as the longest filename length
-						 */
-						longestFileNameLength = length;
-					}
-				}
-			}
 		}
 	}
 
@@ -215,6 +186,9 @@ public class IOSort {
 		if (file != null && file.exists()) {
 			// Get the filename
 			String filename = file.getName();
+			if (filename.length() > longestFileNameLength) {
+				longestFileNameLength = filename.length();
+			}
 
 			/*
 			 * Get the file extension of the given file, or if the file is a hidden file,
@@ -250,6 +224,7 @@ public class IOSort {
 		}
 		// Create a new File object
 		File newFile = new File(destinationPath.concat(PATH_SEPARATOR + file.getName()));
+		newFile.createNewFile();
 		// If the file doesn't exists in the destination directory, copy the file there
 		if (!file.exists()) {
 			Files.copy(file.toPath(), newFile.toPath());
