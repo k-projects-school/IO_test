@@ -5,6 +5,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 
+//TODO je hebt het goed aangepakt!
+// je hebt met de klasse Files gewerkt wat backwards compatible is :)
+// indien je met oudere versies van java zou werken( 1-7)
+// Er is wel een voorkeur sinds java 7 om Path interface en File helper class te gebruiken
+// je kan evenveel mee doen als met Files class.
+// Indien je in de toekomst nog eens met java nio.2 moet werken probeer het met Path en File
 public class IOSort {
 	/**
 	 * The directory that needs to be sorted
@@ -160,6 +166,11 @@ public class IOSort {
 		// If the given search is a directory
 		if (search.isDirectory()) {
 			// Loop through the directory and call this method again
+            // TODO search.listFiles() kan NullPointerException produceren dus
+			// kan control en data flow issues veroorzaken,
+			// je kan je code nog efficienter maken door
+			// de methode requireNonNull() van Objects te gebruiken -> Objects.requireNonNull(search.listFiles())
+			// check documentatie voor meer info ;)
 			for (File file : search.listFiles()) {
 				createDirectoriesByFileExtensions(file);
 			}
